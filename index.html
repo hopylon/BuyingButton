@@ -6,7 +6,22 @@
   <title>주소 검색</title>
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
+    console.log("HTML script tag loaded."); // ✅ 추가 1
+
     function execDaumPostcode() {
+        console.log("execDaumPostcode 함수 호출됨."); // ✅ 추가 2
+
+        // layer div가 존재하는지, 스타일은 어떤지 확인
+        const layerDiv = document.getElementById('layer');
+        if (layerDiv) {
+            console.log("Layer div 존재함.");
+            console.log("Layer div display: " + layerDiv.style.display);
+            console.log("Layer div width: " + layerDiv.style.width);
+            console.log("Layer div height: " + layerDiv.style.height);
+        } else {
+            console.log("❌ Layer div 존재하지 않음!");
+        }
+
       new daum.Postcode({
         oncomplete: function(data) {
           try {
@@ -14,18 +29,22 @@
             console.log("📨 AndroidBridge 호출 완료");
           } catch (e) {
             console.error("❌ AndroidBridge 호출 실패", e);
+                console.error("AndroidBridge 에러 상세:", e.message); // ✅ 추가 3
           }
         },
-        // embed 방식은 width와 height를 percent로 지정하는 것이 좋습니다.
         width: '100%',
         height: '100%'
       }).embed(document.getElementById('layer'));
-      // 여기서는 이미 layer가 display: block이므로 이 줄은 필요 없습니다.
-      // document.getElementById('layer').style.display = 'block';
+
+      // embed 후 layer div의 최종 스타일 확인
+      if (layerDiv) {
+          console.log("Layer div display after embed: " + layerDiv.style.display);
+      }
+      // document.getElementById('layer').style.display = 'block'; // 이 줄은 제거했었죠? 없애는 게 맞습니다.
     }
 
     window.onload = function () {
-      // 페이지 로드 후 바로 주소 검색창을 띄웁니다.
+        console.log("window.onload 호출됨."); // ✅ 추가 4
       execDaumPostcode();
     }
   </script>
@@ -39,8 +58,8 @@
     #layer {
       width: 100vw;
       height: 100vh;
-      /* display: none; 이 부분을 삭제하거나 block으로 변경 */
-      background-color: white; /* 배경색은 선택 사항 */
+      /* display: none; 이 부분이 없어야 합니다. */
+      background-color: white;
     }
   </style>
 </head>
