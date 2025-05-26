@@ -1,72 +1,17 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>주소 검색</title>
-  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <script>
-    console.log("HTML script tag loaded."); // ✅ 추가 1
-
-    function execDaumPostcode() {
-        console.log("execDaumPostcode 함수 호출됨."); // ✅ 추가 2
-
-        // layer div가 존재하는지, 스타일은 어떤지 확인
-        const layerDiv = document.getElementById('layer');
-        if (layerDiv) {
-            console.log("Layer div 존재함.");
-            console.log("Layer div display: " + layerDiv.style.display);
-            console.log("Layer div width: " + layerDiv.style.width);
-            console.log("Layer div height: " + layerDiv.style.height);
-        } else {
-            console.log("❌ Layer div 존재하지 않음!");
-        }
-
-      new daum.Postcode({
-        oncomplete: function(data) {
-          try {
-            window.AndroidBridge.onAddressSelected(data.roadAddress);
-            console.log("📨 AndroidBridge 호출 완료");
-          } catch (e) {
-            console.error("❌ AndroidBridge 호출 실패", e);
-                console.error("AndroidBridge 에러 상세:", e.message); // ✅ 추가 3
-          }
-        },
-        width: '100%',
-        height: '100%'
-      }).embed(document.getElementById('layer'));
-
-      // embed 후 layer div의 최종 스타일 확인
-      if (layerDiv) {
-          console.log("Layer div display after embed: " + layerDiv.style.display);
-      }
-      // document.getElementById('layer').style.display = 'block'; // 이 줄은 제거했었죠? 없애는 게 맞습니다.
-    }
-
-    window.onload = function () {
-        console.log("window.onload 호출됨."); // ✅ 추가 4
-      execDaumPostcode();
-    }
-  </script>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }
-    #layer {
-      width: 100vw;
-      height: 100vh;
-      /* display: none; 이 부분이 없어야 합니다. */
-      background-color: white;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
-  <div id="layer"></div>
+  <div id="wrap" style="width:100%;height:100vh;"></div>
+  <script>
+    new daum.Postcode({
+      oncomplete: function(data) {
+        window.AndroidBridge?.onAddressSelected?.(data.roadAddress);
+      }
+    }).embed(document.getElementById(\"wrap\"));
+  </script>
 </body>
 </html>
-
-
-
